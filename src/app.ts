@@ -1,10 +1,12 @@
+import { migrate } from 'drizzle-orm/mysql2/migrator';
 import fastify from 'fastify';
 import { createServer, Server as HTTPServer } from 'http';
 import { Server as SocketIOServer } from 'socket.io';
+import { db } from './database';
 
 class SetupApplication {
-    private httpServer: HTTPServer;
-    private io: SocketIOServer;
+    public httpServer: HTTPServer;
+    public io: SocketIOServer;
 
     constructor(
         private port: number,
@@ -23,7 +25,9 @@ class SetupApplication {
         this.setupWebSocket();
     }
 
-    private async setupFastify() {}
+    private async setupFastify() {
+        await migrate(db, { migrationsFolder: './drizzle' });
+    }
 
     private async setupWebSocket() {
         this.io.on('connection', (socket) => {

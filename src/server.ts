@@ -5,10 +5,12 @@ dotenv.config();
 
 class Server {
     static startServer() {
-        const application = new SetupApplication(3333);
+        const application = new SetupApplication(process.env.PORT);
         application.initApplication();
         application.startApplication();
+        return application;
     }
 }
 
-Server.startServer();
+const applicationInstance = Server.startServer();
+export const { httpServer, io } = applicationInstance;

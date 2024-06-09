@@ -1,0 +1,13 @@
+# docker compose up -d
+# docker compose stop
+
+services:
+  api-ws-mysql:
+    image: mysql
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_USER=docker
+      - MYSQL_PASSWORD=teste
+      - MYSQL_DATABASE=apiws
+      - MYSQL_ROOT_PASSWORD=teste
