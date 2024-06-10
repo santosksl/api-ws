@@ -3,6 +3,7 @@ import fastify from 'fastify';
 import { createServer, Server as HTTPServer } from 'http';
 import { Server as SocketIOServer } from 'socket.io';
 import { db } from './database';
+import { Routes } from './http/routes';
 
 class SetupApplication {
     public httpServer: HTTPServer;
@@ -21,12 +22,17 @@ class SetupApplication {
     }
 
     public initApplication() {
+        this.setupRoutes();
         this.setupFastify();
         this.setupWebSocket();
     }
 
     private async setupFastify() {
         await migrate(db, { migrationsFolder: './drizzle' });
+    }
+
+    private setupRoutes() {
+        Routes.RegisterRoutes(this.app);
     }
 
     private async setupWebSocket() {
