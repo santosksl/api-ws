@@ -5,5 +5,7 @@ declare namespace NodeJS {
         MYSQL_DATABASE: string;
         MYSQL_PASSWORD: string;
         MYSQL_USER: string;
+
+        JWT_SECKET_KEY: string;
     }
 }

@@ -22,9 +22,18 @@ class AuthenticateUserController {
                 password,
             });
 
+            const token = await reply.jwtSign(
+                {},
+                {
+                    sign: {
+                        sub: `${user.id}`,
+                    },
+                },
+            );
+
             return reply
                 .status(201)
-                .send({ message: 'The user has been logged in', user });
+                .send({ message: 'The user has been logged in', user, token });
         } catch (err) {
             if (err instanceof UserAlreadyExistsError) {
                 return reply.status(409).send({ message: err.message });
