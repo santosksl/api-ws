@@ -1,7 +1,13 @@
 class UserAlreadyExistsError extends Error {
     constructor() {
-        super('❌ E-mail already exists!');
+        super('E-mail already exists!');
     }
 }
 
-export { UserAlreadyExistsError };
+class InvalidCredentialsError extends Error {
+    constructor() {
+        super('Invalid Credentials');
+    }
+}
+
+export { UserAlreadyExistsError, InvalidCredentialsError };

@@ -1,12 +1,12 @@
 import { db } from '@/database';
 import { users } from '@/database/schema';
-import * as bcrypt from 'bcryptjs';
+import bcrypt from 'bcryptjs';
 import { eq } from 'drizzle-orm';
 import { IUserDTO } from '../repositories/IUserRepository';
 import { UserAlreadyExistsError } from './errors';
 
 class CreateUserUseCase {
-    async execute({ name, email, passwordHash, socketId }: IUserDTO) {
+    async execute({ name, email, passwordHash }: IUserDTO) {
         const alreadyExistsEmail = await db
             .select()
             .from(users)
@@ -16,8 +16,8 @@ class CreateUserUseCase {
             throw new UserAlreadyExistsError();
         }
 
-        await bcrypt.hash(passwordHash, 6);
-        await db.insert(users).values({ name, email, passwordHash, socketId });
+        const hash = await bcrypt.hash(passwordHash, 6);
+        await db.insert(users).values({ name, email, passwordHash: hash });
     }
 }
 

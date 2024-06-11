@@ -1,33 +1,30 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { z } from 'zod';
-import { CreateUserUseCase } from '../useCases/CreateUserUseCase';
+import { AuthenticateUserUseCase } from '../useCases/AuthenticateUserUseCase';
 import { UserAlreadyExistsError } from '../useCases/errors';
 
-const userSchema = z.object({
-    name: z
-        .string()
-        .min(2, { message: 'Name must be at least 2 characters long' }),
+const authSchema = z.object({
     email: z.string().email({ message: 'Invalid email format' }),
     password: z
         .string()
         .min(2, { message: 'Password must be at least 2 characters long' }),
 });
 
-class CreateUserController {
-    constructor(private createUserUseCase: CreateUserUseCase) {}
+class AuthenticateUserController {
+    constructor(private authUserUseCase: AuthenticateUserUseCase) {}
 
     async handle(request: FastifyRequest, reply: FastifyReply) {
-        const { name, email, password } = userSchema.parse(request.body);
+        const { email, password } = authSchema.parse(request.body);
 
         try {
-            await this.createUserUseCase.execute({
-                name,
+            const { user } = await this.authUserUseCase.execute({
                 email,
-                passwordHash: password,
+                password,
             });
+
             return reply
                 .status(201)
-                .send({ message: 'User created successfully' });
+                .send({ message: 'The user has been logged in', user });
         } catch (err) {
             if (err instanceof UserAlreadyExistsError) {
                 return reply.status(409).send({ message: err.message });
@@ -38,4 +35,4 @@ class CreateUserController {
     }
 }
 
-export { CreateUserController };
+export { AuthenticateUserController };

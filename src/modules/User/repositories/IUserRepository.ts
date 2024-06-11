@@ -2,7 +2,11 @@ interface IUserDTO {
     name: string;
     email: string;
     passwordHash: string;
-    socketId: string;
 }
 
-export { IUserDTO };
+interface IAuthUserDTO {
+    email: string;
+    password: string;
+}
+
+export { IAuthUserDTO, IUserDTO };
