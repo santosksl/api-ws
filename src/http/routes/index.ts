@@ -1,3 +1,4 @@
+import { roomRoutes } from '@/modules/Room/routes/room-routes';
 import { userRoutes } from '@/modules/User/routes/user-routes';
 import cors from '@fastify/cors';
 import fastifyJwt from '@fastify/jwt';
@@ -14,6 +15,7 @@ class Routes {
 
         routerController.register(cors, { origin: true });
         routerController.register(userRoutes, { prefix: '/user' });
+        routerController.register(roomRoutes, { prefix: '/room' });
     }
 }
 

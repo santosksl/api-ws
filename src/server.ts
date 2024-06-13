@@ -12,5 +12,4 @@ class Server {
     }
 }
 
-const applicationInstance = Server.startServer();
-export const { httpServer, io } = applicationInstance;
+Server.startServer();

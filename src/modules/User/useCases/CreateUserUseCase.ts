@@ -1,8 +1,8 @@
 import { db } from '@/database';
+import { IUserDTO } from '@/database/repositories/IUserRepository';
 import { users } from '@/database/schema';
 import bcrypt from 'bcryptjs';
 import { eq } from 'drizzle-orm';
-import { IUserDTO } from '../repositories/IUserRepository';
 import { UserAlreadyExistsError } from './errors';
 
 class CreateUserUseCase {

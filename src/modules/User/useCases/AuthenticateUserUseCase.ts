@@ -2,7 +2,7 @@ import { db } from '@/database';
 import { users } from '@/database/schema';
 import bcrypt from 'bcryptjs';
 import { eq } from 'drizzle-orm';
-import { IAuthUserDTO } from '../repositories/IUserRepository';
+import { IAuthUserDTO } from '@/database/repositories/IUserRepository';
 import { InvalidCredentialsError } from './errors';
 
 interface IAuthUserResponse {
@@ -40,16 +40,18 @@ class AuthenticateUserUseCase {
             throw new InvalidCredentialsError();
         }
 
-        const getUserId = await db
+        const getUserInfo = await db
             .select({
                 id: users.id,
+                name: users.name,
             })
             .from(users);
 
-        const { id } = getUserId[0];
+        const { id, name } = getUserInfo[0];
 
         const user = {
             id,
+            name,
         };
 
         return { user };

@@ -1,25 +1,14 @@
 import { migrate } from 'drizzle-orm/mysql2/migrator';
 import fastify from 'fastify';
-import { createServer, Server as HTTPServer } from 'http';
-import { Server as SocketIOServer } from 'socket.io';
+import { WebSocketServer } from 'ws';
 import { db } from './database';
 import { Routes } from './http/routes';
 
 class SetupApplication {
-    public httpServer: HTTPServer;
-    public io: SocketIOServer;
-
     constructor(
         private port: number,
         public app = fastify(),
-    ) {
-        this.httpServer = createServer(this.app.server);
-        this.io = new SocketIOServer(this.httpServer, {
-            cors: {
-                origin: 'http://localhost:3000',
-            },
-        });
-    }
+    ) {}
 
     public initApplication() {
         this.setupRoutes();
@@ -36,19 +25,16 @@ class SetupApplication {
     }
 
     private async setupWebSocket() {
-        this.io.on('connection', (socket) => {
-            console.log('User Connected:', socket.id);
+        const wss = new WebSocketServer({
+            port: this.port,
+        });
 
-            socket.on('disconnect', () => {
-                console.log('User Disconnected:', socket.id);
-            });
+        wss.on('connection', (socket) => {
+            console.log('Connection WebSockets');
         });
     }
 
     public startApplication() {
-        this.httpServer.listen(this.port, () =>
-            console.log('🚀 WebSockets Server Running'),
-        );
         this.app
             .listen({
                 host: '0.0.0.0',

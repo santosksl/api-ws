@@ -1,23 +1,16 @@
-import {
-    int,
-    mysqlTable,
-    text,
-    timestamp,
-    varchar,
-} from 'drizzle-orm/mysql-core';
+import { int, mysqlTable, timestamp, varchar } from 'drizzle-orm/mysql-core';
 
 export const users = mysqlTable('users', {
     id: int('id').autoincrement().primaryKey(),
     name: varchar('name', { length: 255 }).notNull(),
     email: varchar('email', { length: 255 }),
     passwordHash: varchar('password_hash', { length: 255 }).notNull(),
-    socketId: varchar('socket', { length: 255 }),
     avatar: varchar('avatar', { length: 255 }),
 });
 
-export const message = mysqlTable('messages', {
-    to: varchar('to', { length: 255 }),
-    text: text('text'),
-    roomId: varchar('room', { length: 255 }),
+export const room = mysqlTable('room', {
+    id: int('id').autoincrement().primaryKey(),
+    name: varchar('name', { length: 255 }).notNull(),
+    ownerId: int('owner_id').references(() => users.id),
     createdAt: timestamp('created_at').defaultNow().notNull(),
 });

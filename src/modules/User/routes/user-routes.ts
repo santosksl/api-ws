@@ -1,5 +1,5 @@
-import { authUserController, createUserController } from '@/http/controllers';
 import { FastifyInstance } from 'fastify';
+import { authUserController, createUserController } from '../controllers';
 
 async function userRoutes(fastify: FastifyInstance) {
     fastify.post('/signup', async (request, reply) => {
