@@ -6,8 +6,14 @@ class UserAlreadyExistsError extends Error {
 
 class InvalidCredentialsError extends Error {
     constructor() {
-        super('Invalid Credentials');
+        super('Invalid Credentials!');
     }
 }
 
-export { UserAlreadyExistsError, InvalidCredentialsError };
+class UserNotExistsError extends Error {
+    constructor() {
+        super('User not exists!');
+    }
+}
+
+export { InvalidCredentialsError, UserAlreadyExistsError, UserNotExistsError };

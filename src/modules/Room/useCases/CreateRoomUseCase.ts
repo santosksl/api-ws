@@ -1,7 +1,7 @@
 import { db } from '@/database';
 import { IRoomDTO } from '@/database/repositories/IRoomRepository';
 import { room, users } from '@/database/schema';
-import { OwnerIdNotExistsError } from './errors';
+import { UserNotExistsError } from '@/modules/User/useCases/errors';
 
 class CreateRoomUseCase {
     async execute({ name, ownerId }: IRoomDTO) {
@@ -13,8 +13,8 @@ class CreateRoomUseCase {
 
         const { userId } = whoeverCreatedItReallyExists[0];
 
-        if (userId !== ownerId) {
-            throw new OwnerIdNotExistsError();
+        if (ownerId !== userId) {
+            throw new UserNotExistsError();
         }
 
         await db.insert(room).values({ name, ownerId });

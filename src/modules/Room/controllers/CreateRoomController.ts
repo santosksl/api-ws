@@ -1,7 +1,7 @@
+import { UserNotExistsError } from '@/modules/User/useCases/errors';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { z } from 'zod';
 import { CreateRoomUseCase } from '../useCases/CreateRoomUseCase';
-import { OwnerIdNotExistsError } from '../useCases/errors';
 
 const roomSchema = z.object({
     name: z
@@ -22,7 +22,7 @@ class CreateRoomController {
                 .status(201)
                 .send({ message: 'The room has been created successfully' });
         } catch (err) {
-            if (err instanceof OwnerIdNotExistsError) {
+            if (err instanceof UserNotExistsError) {
                 return reply.status(409).send({ message: err.message });
             }
 

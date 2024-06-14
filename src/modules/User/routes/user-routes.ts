@@ -1,5 +1,9 @@
 import { FastifyInstance } from 'fastify';
-import { authUserController, createUserController } from '../controllers';
+import {
+    authUserController,
+    createUserController,
+    fetchUserInfosController,
+} from '../controllers';
 
 async function userRoutes(fastify: FastifyInstance) {
     fastify.post('/signup', async (request, reply) => {
@@ -8,6 +12,10 @@ async function userRoutes(fastify: FastifyInstance) {
 
     fastify.post('/login', async (request, reply) => {
         await authUserController.handle(request, reply);
+    });
+
+    fastify.get('/:userId', async (request, reply) => {
+        await fetchUserInfosController.handle(request, reply);
     });
 }
 
