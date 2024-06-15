@@ -1,8 +1,10 @@
 import { migrate } from 'drizzle-orm/mysql2/migrator';
 import fastify from 'fastify';
-import { WebSocketServer } from 'ws';
+import { WebSocket, WebSocketServer } from 'ws';
 import { db } from './database';
 import { Routes } from './http/routes';
+import connectionWebSocketClient from './websocket/client';
+import connectionWebSocketServer from './websocket/server/';
 
 class SetupApplication {
     constructor(
@@ -29,9 +31,10 @@ class SetupApplication {
             port: this.port,
         });
 
-        wss.on('connection', (socket) => {
-            console.log('Connection WebSockets');
-        });
+        await connectionWebSocketServer(wss);
+
+        const ws = new WebSocket('ws://localhost:3333');
+        await connectionWebSocketClient(ws);
     }
 
     public startApplication() {
