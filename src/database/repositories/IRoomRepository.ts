@@ -3,4 +3,9 @@ interface IRoomDTO {
     ownerId: number;
 }
 
-export { IRoomDTO };
+interface IJoinRoomDTO {
+    roomId: number;
+    userId: number;
+}
+
+export { IJoinRoomDTO, IRoomDTO };

@@ -1,6 +1,6 @@
 import { db } from '@/database';
 import { IRoomDTO } from '@/database/repositories/IRoomRepository';
-import { room, users } from '@/database/schema';
+import { rooms, users } from '@/database/schema';
 import { UserNotExistsError } from '@/modules/User/useCases/errors';
 
 class CreateRoomUseCase {
@@ -17,7 +17,7 @@ class CreateRoomUseCase {
             throw new UserNotExistsError();
         }
 
-        await db.insert(room).values({ name, ownerId });
+        await db.insert(rooms).values({ name, ownerId });
     }
 }
 

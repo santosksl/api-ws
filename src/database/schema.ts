@@ -8,9 +8,18 @@ export const users = mysqlTable('users', {
     avatar: varchar('avatar', { length: 255 }),
 });
 
-export const room = mysqlTable('room', {
+export const rooms = mysqlTable('rooms', {
     id: int('id').autoincrement().primaryKey(),
     name: varchar('name', { length: 255 }).notNull(),
     ownerId: int('owner_id').references(() => users.id),
     createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+export const members = mysqlTable('members', {
+    userId: int('user_id')
+        .references(() => users.id)
+        .notNull(),
+    roomId: int('room_id')
+        .references(() => rooms.id)
+        .notNull(),
 });

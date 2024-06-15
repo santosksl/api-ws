@@ -5,36 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1717971332260,
-      "tag": "0000_confused_betty_brant",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1718052010523,
-      "tag": "0001_abandoned_zemo",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1718229518148,
-      "tag": "0002_melted_klaw",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1718314364456,
-      "tag": "0003_polite_puff_adder",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1718315440699,
-      "tag": "0004_lying_ezekiel_stane",
+      "when": 1718418869288,
+      "tag": "0000_tidy_gargoyle",
       "breakpoints": true
     }
   ]
