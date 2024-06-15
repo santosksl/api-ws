@@ -4,6 +4,7 @@ import { eq } from 'drizzle-orm';
 import { UserNotExistsError } from './errors';
 
 interface IUserSQL {
+    id: number;
     name: string;
 }
 
@@ -29,6 +30,7 @@ class FetchUserInfosUseCase {
 
         const user = await db
             .select({
+                id: users.id,
                 name: users.name,
             })
             .from(users)

@@ -1,23 +1,36 @@
 import { db } from '@/database';
 import { IRoomDTO } from '@/database/repositories/IRoomRepository';
-import { rooms, users } from '@/database/schema';
+import { members, rooms, users } from '@/database/schema';
 import { UserNotExistsError } from '@/modules/User/useCases/errors';
+import { eq } from 'drizzle-orm';
 
 class CreateRoomUseCase {
     async execute({ name, ownerId }: IRoomDTO) {
         const whoeverCreatedItReallyExists = await db
-            .select({
-                userId: users.id,
-            })
-            .from(users);
+            .select()
+            .from(users)
+            .where(eq(users.id, ownerId));
 
-        const { userId } = whoeverCreatedItReallyExists[0];
-
-        if (ownerId !== userId) {
+        if (whoeverCreatedItReallyExists.length <= 0) {
             throw new UserNotExistsError();
         }
 
-        await db.insert(rooms).values({ name, ownerId });
+        const createRoom = await db.insert(rooms).values({ name, ownerId });
+
+        const selectRoom = await db
+            .select({
+                roomId: rooms.id,
+            })
+            .from(rooms)
+            .where(eq(rooms.id, createRoom[0].insertId));
+
+        const { roomId } = selectRoom[0];
+
+        const createMember = await db
+            .insert(members)
+            .values({ userId: ownerId, roomId });
+
+        return { createRoom, createMember };
     }
 }
 
