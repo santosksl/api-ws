@@ -10,9 +10,9 @@ class FetchUserInfosController {
         const userIdConvert = Number(userId);
 
         try {
-            const { user } =
+            const { user, rooms } =
                 await this.fetchUserInfosUseCase.execute(userIdConvert);
-            return reply.status(201).send({ user });
+            return reply.status(201).send({ user, rooms });
         } catch (err) {
             if (err instanceof UserNotExistsError) {
                 return reply.status(409).send({ message: err.message });

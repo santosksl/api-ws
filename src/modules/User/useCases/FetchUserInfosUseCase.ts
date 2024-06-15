@@ -1,24 +1,29 @@
 import { db } from '@/database';
-import { users } from '@/database/schema';
+import { members, rooms, users } from '@/database/schema';
+import { eq } from 'drizzle-orm';
 import { UserNotExistsError } from './errors';
 
 interface IUserSQL {
     name: string;
 }
 
+interface IRoomsSQL {
+    name: string;
+}
+
 interface FetchUserInfosResponse {
     user: IUserSQL[];
+    rooms: IRoomsSQL[];
 }
 
 class FetchUserInfosUseCase {
     async execute(userId: number): Promise<FetchUserInfosResponse> {
         const thisUserReallyExists = await db
             .select({ dbUserId: users.id })
-            .from(users);
+            .from(users)
+            .where(eq(users.id, userId));
 
-        const { dbUserId } = thisUserReallyExists[0];
-
-        if (userId !== dbUserId) {
+        if (thisUserReallyExists.length <= 0) {
             throw new UserNotExistsError();
         }
 
@@ -26,9 +31,16 @@ class FetchUserInfosUseCase {
             .select({
                 name: users.name,
             })
-            .from(users);
+            .from(users)
+            .where(eq(users.id, userId));
 
-        return { user };
+        const roomsList = await db
+            .select({ name: rooms.name })
+            .from(members)
+            .innerJoin(rooms, eq(members.roomId, rooms.id))
+            .where(eq(members.userId, userId));
+
+        return { user, rooms: roomsList };
     }
 }
 

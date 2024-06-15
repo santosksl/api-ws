@@ -1,7 +1,8 @@
+import { UserNotExistsError } from '@/modules/User/useCases/errors';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { z } from 'zod';
 import { JoinRoomUseCase } from '../useCases/JoinRoomUseCase';
-import { RoomNotExistsError } from '../useCases/errors';
+import { RoomNotExistsError, UserAlreadyInRoomError } from '../useCases/errors';
 
 const joinRoomSchema = z.object({
     roomId: z.number(),
@@ -21,6 +22,14 @@ class JoinRoomController {
             });
         } catch (err) {
             if (err instanceof RoomNotExistsError) {
+                return reply.status(409).send({ message: err.message });
+            }
+
+            if (err instanceof UserAlreadyInRoomError) {
+                return reply.status(409).send({ message: err.message });
+            }
+
+            if (err instanceof UserNotExistsError) {
                 return reply.status(409).send({ message: err.message });
             }
 
