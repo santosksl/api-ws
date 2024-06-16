@@ -9,6 +9,7 @@ interface IUserSQL {
 }
 
 interface IRoomsSQL {
+    id: number;
     name: string;
 }
 
@@ -37,7 +38,7 @@ class FetchUserInfosUseCase {
             .where(eq(users.id, userId));
 
         const roomsList = await db
-            .select({ name: rooms.name })
+            .select({ id: rooms.id, name: rooms.name })
             .from(members)
             .innerJoin(rooms, eq(members.roomId, rooms.id))
             .where(eq(members.userId, userId));

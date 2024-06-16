@@ -1,6 +1,7 @@
 declare namespace NodeJS {
     interface ProcessEnv {
-        PORT: number;
+        HTTP_PORT: number;
+        WEBSOCKET_PORT: number;
 
         MYSQL_DATABASE: string;
         MYSQL_PASSWORD: string;

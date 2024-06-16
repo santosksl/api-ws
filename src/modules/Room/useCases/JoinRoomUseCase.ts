@@ -11,11 +11,10 @@ class JoinRoomUseCase {
             .select({
                 dbRoomId: rooms.id,
             })
-            .from(rooms);
+            .from(rooms)
+            .where(eq(rooms.id, roomId));
 
-        const { dbRoomId } = doesThisRoomReallyExist[0];
-
-        if (roomId !== dbRoomId) {
+        if (doesThisRoomReallyExist.length <= 0) {
             throw new RoomNotExistsError();
         }
 
@@ -32,11 +31,10 @@ class JoinRoomUseCase {
             .select({
                 dbUserId: users.id,
             })
-            .from(users);
+            .from(users)
+            .where(eq(users.id, userId));
 
-        const { dbUserId } = theUserReallyExists[0];
-
-        if (userId !== dbUserId) {
+        if (theUserReallyExists.length <= 0) {
             throw new UserNotExistsError();
         }
 

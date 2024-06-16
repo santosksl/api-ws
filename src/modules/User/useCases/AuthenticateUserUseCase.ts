@@ -1,8 +1,8 @@
 import { db } from '@/database';
+import { IAuthUserDTO } from '@/database/repositories/IUserRepository';
 import { users } from '@/database/schema';
 import bcrypt from 'bcryptjs';
 import { eq } from 'drizzle-orm';
-import { IAuthUserDTO } from '@/database/repositories/IUserRepository';
 import { InvalidCredentialsError } from './errors';
 
 interface IAuthUserResponse {
@@ -31,7 +31,8 @@ class AuthenticateUserUseCase {
             .select({
                 passwordHash: users.passwordHash,
             })
-            .from(users);
+            .from(users)
+            .where(eq(users.email, email));
 
         const { passwordHash } = getPasswordHashed[0];
         const doesPasswordMatch = await bcrypt.compare(password, passwordHash);
@@ -45,7 +46,8 @@ class AuthenticateUserUseCase {
                 id: users.id,
                 name: users.name,
             })
-            .from(users);
+            .from(users)
+            .where(eq(users.email, email));
 
         const { id, name } = getUserInfo[0];
 
